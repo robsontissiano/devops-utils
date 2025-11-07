@@ -1,14 +1,21 @@
 # DevOps Utilities, Templates, and Tools 🚀
 
-A centralized repository for DevOps utilities, commands, templates, and best practices. This collection includes comprehensive guides for Kubernetes, Docker, Terraform, Pulumi, AWS, Azure, Google Cloud Platform (GCP), and more.
+A centralized repository for DevOps utilities, commands, templates, and best practices. This collection is organized into 8 core categories covering the complete DevOps lifecycle.
 
 ## 📚 Table of Contents
 
 - [Quick Start](#quick-start)
-- [Available Tools](#available-tools)
-- [Shell Profiles](#shell-profiles)
-- [Contributing](#contributing)
-- [License](#license)
+- [1. Containerization](#1-containerization)
+- [2. Infrastructure](#2-infrastructure)
+- [3. Monitoring](#3-monitoring)
+- [4. CI/CD](#4-cicd)
+- [5. Config Management](#5-config-management)
+- [6. Secret Management](#6-secret-management)
+- [7. Testing](#7-testing)
+- [8. Cloud CLI](#8-cloud-cli)
+- [Repository Structure](#-repository-structure)
+- [Best Practices](#-best-practices)
+- [Contributing](#-contributing)
 
 ## 🚀 Quick Start
 
@@ -21,32 +28,38 @@ cd devops-utils
 ### Load Shell Aliases
 ```bash
 # For Zsh
-echo "source $(pwd)/shell-profiles/devops-aliases.sh" >> ~/.zshrc
+echo "source $(pwd)/8-cloud-cli/shell-profiles/devops-aliases.sh" >> ~/.zshrc
 source ~/.zshrc
 
 # For Bash
-echo "source $(pwd)/shell-profiles/devops-aliases.sh" >> ~/.bashrc
+echo "source $(pwd)/8-cloud-cli/shell-profiles/devops-aliases.sh" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-## 🛠️ Available Tools
+## 📋 Category Overview
 
-### Container Orchestration
+This repository is organized into 8 core DevOps categories:
 
-#### [Kubernetes](./kubernetes/)
-Complete Kubernetes commands and best practices for container orchestration.
+| Category | Status | Tools Included |
+|----------|--------|----------------|
+| **1. Containerization** | ✅ Complete | Docker, Kubernetes |
+| **2. Infrastructure** | ✅ Complete | Terraform, Pulumi |
+| **3. Monitoring** | ✅ Complete | Prometheus+Grafana, Zabbix, ELK, Netdata |
+| **4. CI/CD** | ✅ Complete | GitHub Actions, Jenkins, GitLab CI, AWS CodePipeline, ArgoCD |
+| **5. Config Management** | 🔜 Planned | Ansible, Chef, Puppet, SaltStack |
+| **6. Secret Management** | 🔜 Planned | Vault, AWS Secrets Manager, Sealed Secrets |
+| **7. Testing** | 🔜 Planned | k6, Trivy, Terratest, Checkov, OWASP ZAP |
+| **8. Cloud CLI** | ✅ Complete | AWS, Azure, GCP, Shell Profiles |
 
-**Topics Covered:**
-- Basic kubectl commands
-- Pod, Service, and Deployment management
-- ConfigMaps and Secrets
-- Monitoring and Scaling
-- Horizontal Pod Autoscaler (HPA)
-- Context and namespace management
+---
 
-[View Kubernetes Guide →](./kubernetes/README.md)
+## 🛠️ DevOps Toolkit by Category
 
-#### [Docker](./docker/)
+### 1. Containerization
+
+Container technologies for packaging, distributing, and running applications.
+
+#### [Docker](./1-containerization/docker/) - Container Platform
 Comprehensive Docker commands, one-liners, and container management utilities.
 
 **Topics Covered:**
@@ -55,7 +68,6 @@ Comprehensive Docker commands, one-liners, and container management utilities.
 - Docker Compose workflows
 - Networking and volumes
 - Cleanup and maintenance scripts
-- Advanced debugging techniques
 
 **Essential One-Liners:**
 ```bash
@@ -66,157 +78,196 @@ docker stop $(docker ps -a -q); docker rm $(docker ps -a -q)
 docker stop $(docker ps -a -q); docker rm $(docker ps -a -q); docker-compose build; docker-compose up -d
 ```
 
-[View Docker Guide →](./docker/README.md)
+[View Docker Guide →](./1-containerization/docker/README.md)
 
-### Infrastructure as Code
-
-#### [Terraform](./terraform/)
-Terraform commands, templates, and best practices for infrastructure management.
+#### [Kubernetes](./1-containerization/kubernetes/) - Container Orchestration
+Complete Kubernetes commands and best practices for container orchestration.
 
 **Topics Covered:**
-- Basic Terraform workflow
-- Workspace management
+- kubectl commands and workflows
+- Pod, Service, and Deployment management
+- ConfigMaps and Secrets
+- Monitoring and Scaling (HPA)
+- Multi-cluster management
+
+[View Kubernetes Guide →](./1-containerization/kubernetes/README.md)
+
+---
+
+### 2. Infrastructure
+
+Infrastructure as Code (IaC) tools for provisioning and managing cloud resources.
+
+#### [Terraform](./2-infrastructure/terraform/) - HashiCorp IaC
+Industry-standard infrastructure as code using HCL (HashiCorp Configuration Language).
+
+**Topics Covered:**
+- Terraform workflow (init, plan, apply)
 - State management and backends
-- Module creation and usage
-- AWS, Azure, and multi-cloud examples
+- Workspace and module management
+- Multi-cloud deployments
 - Best practices and security
 
-[View Terraform Guide →](./terraform/README.md)
+[View Terraform Guide →](./2-infrastructure/terraform/README.md)
 
-#### [Pulumi](./pulumi/)
-Modern infrastructure as code using real programming languages (TypeScript, Python, Go, C#).
+#### [Pulumi](./2-infrastructure/pulumi/) - Modern IaC
+Infrastructure as code using real programming languages (TypeScript, Python, Go, C#).
 
 **Topics Covered:**
-- Project initialization and management
-- Stack and configuration management
-- Multi-language examples (TypeScript, Python)
+- Project and stack management
+- Multi-language support
 - AWS, Azure, and Kubernetes deployments
 - Policy as Code with CrossGuard
-- Testing infrastructure code
+- Infrastructure testing
 
-[View Pulumi Guide →](./pulumi/README.md)
-
-### Cloud Platforms
-
-#### [AWS (Amazon Web Services)](./aws/)
-Comprehensive AWS CLI commands and utilities for cloud resource management.
-
-**Topics Covered:**
-- EC2 instance management
-- S3 storage operations
-- IAM user and role management
-- RDS database operations
-- Lambda functions
-- ECS/EKS container services
-- CloudFormation stacks
-- CloudWatch logs and monitoring
-- VPC networking
-- Route53 DNS management
-
-[View AWS Guide →](./aws/README.md)
-
-#### [Azure](./azure/)
-Complete Azure CLI commands and utilities for Microsoft Azure cloud.
-
-**Topics Covered:**
-- Virtual Machine management
-- Storage Account operations
-- App Services deployment
-- Azure Kubernetes Service (AKS)
-- Azure Container Registry (ACR)
-- Azure SQL Database
-- Azure Functions
-- Virtual Networks and NSGs
-- Key Vault secrets management
-- Azure AD / Entra ID
-- RBAC and security
-
-[View Azure Guide →](./azure/README.md)
-
-#### [Google Cloud Platform (GCP)](./gcp/)
-Complete gcloud CLI commands and utilities for Google Cloud.
-
-**Topics Covered:**
-- Compute Engine VM management
-- Google Kubernetes Engine (GKE)
-- Cloud Storage (GCS) operations
-- Cloud SQL databases
-- Cloud Functions serverless
-- Cloud Run containers
-- App Engine applications
-- Cloud Build CI/CD
-- Container/Artifact Registry
-- IAM and service accounts
-- VPC networking and firewall rules
-- Cloud DNS management
-- Secret Manager
-- Logging and monitoring
-
-[View GCP Guide →](./gcp/README.md)
+[View Pulumi Guide →](./2-infrastructure/pulumi/README.md)
 
 ---
 
-### CI/CD - Continuous Integration & Deployment
+### 3. Monitoring
 
-#### [CI/CD Pipelines](./ci-cd/)
-Automated build, test, and deployment pipelines for software delivery.
+Observability solutions for metrics, logs, and application performance monitoring.
+
+#### [Monitoring Solutions](./3-monitoring/monitoring/)
+Comprehensive collection of open-source monitoring tools.
 
 **Available Solutions:**
-- **GitHub Actions** ⭐ - Cloud-native CI/CD for GitHub (Most Popular)
-- **Jenkins** - Self-hosted automation server with 1500+ plugins
-- **GitLab CI** - Built-in CI/CD for GitLab repositories
-- **AWS CodePipeline** - Fully managed AWS-native CI/CD
-- **ArgoCD** - GitOps continuous delivery for Kubernetes
+- **Prometheus + Grafana** ⭐ - Modern metrics and dashboards (Recommended)
+- **Zabbix** - Enterprise monitoring with agent-based approach
+- **ELK Stack** - Centralized logging (Elasticsearch, Logstash, Kibana)
+- **Netdata** - Real-time performance monitoring
 
 **Features:**
-- Automated testing and building
-- Docker image creation
-- AWS deployment automation
-- Kubernetes deployments
-- Infrastructure as Code pipelines
-- Multi-environment deployments
-- Security scanning
-
-[View CI/CD Guide →](./ci-cd/README.md)
-
----
-
-### Monitoring Solutions
-
-#### [Monitoring Tools](./monitoring/)
-Comprehensive collection of open-source monitoring solutions for infrastructure and application monitoring.
-
-**Available Solutions:**
-- **Prometheus + Grafana** ⭐ - Modern metrics and visualization (Recommended for cloud-native)
-- **Zabbix** - Enterprise monitoring with agent-based approach
-- **ELK Stack** - Centralized logging and log analysis
-- **Netdata** - Real-time monitoring with zero configuration
-
-**Topics Covered:**
 - Metrics collection and visualization
 - Log aggregation and analysis
 - Alerting and notifications
-- Distributed monitoring
 - Container and Kubernetes monitoring
-- Infrastructure monitoring
-- Application performance monitoring
+- Infrastructure and application monitoring
 
-[View Monitoring Guide →](./monitoring/README.md)
+[View Monitoring Guide →](./3-monitoring/monitoring/README.md)
 
 ---
 
-### Shell Utilities
+### 4. CI/CD
 
-#### [Shell Profiles and Aliases](./shell-profiles/)
-Productivity-boosting shell aliases, functions, and shortcuts for DevOps workflows.
+Continuous Integration and Continuous Deployment pipelines for automated software delivery.
+
+#### [CI/CD Pipelines](./4-ci-cd/ci-cd/)
+Complete collection of CI/CD tools and templates for every use case.
+
+**Available Solutions:**
+- **GitHub Actions** ⭐ - Cloud-native CI/CD for GitHub (Most Popular)
+- **Jenkins** - Self-hosted automation server (1500+ plugins)
+- **GitLab CI** - Built-in CI/CD for GitLab
+- **AWS CodePipeline** - AWS-native CI/CD service
+- **ArgoCD** - GitOps for Kubernetes
+
+**Features:**
+- Automated build, test, and deployment
+- Docker image creation and registry push
+- Multi-cloud deployments (AWS, Azure, GCP)
+- Kubernetes deployments
+- Infrastructure as Code pipelines
+- Security scanning and compliance
+
+**What's Included:**
+- Production-ready pipeline templates
+- Multi-environment configurations
+- Terraform/Pulumi integration
+- Secret management integration
+- Deployment strategies (blue/green, canary)
+
+[View CI/CD Guide →](./4-ci-cd/ci-cd/README.md)
+
+---
+
+### 5. Config Management
+
+**Coming Soon** - Configuration management and automation tools.
+
+**Planned Tools:**
+- Ansible - Agentless automation and configuration management
+- Chef - Infrastructure automation
+- Puppet - Configuration management at scale
+- SaltStack - Event-driven automation
+
+---
+
+### 6. Secret Management
+
+**Coming Soon** - Secure storage and management of sensitive credentials.
+
+**Planned Tools:**
+- HashiCorp Vault - Secrets management platform
+- AWS Secrets Manager - AWS-native secrets storage
+- Azure Key Vault - Azure secrets management
+- Google Secret Manager - GCP secrets storage
+- SOPS - Encrypted secrets in Git
+- Sealed Secrets - Kubernetes-native secrets
+
+---
+
+### 7. Testing
+
+**Coming Soon** - Testing tools for infrastructure, security, and performance.
+
+**Planned Tools:**
+- k6 - Load and performance testing
+- Trivy - Container security scanning
+- Terratest - Infrastructure testing
+- Checkov - IaC security scanning
+- OWASP ZAP - Security testing
+- Selenium - Browser automation
+
+---
+
+### 8. Cloud CLI
+
+Cloud platform command-line interfaces and productivity shortcuts.
+
+#### [AWS (Amazon Web Services)](./8-cloud-cli/aws/)
+Comprehensive AWS CLI commands and utilities.
 
 **Topics Covered:**
-- Docker aliases and functions
-- Kubernetes shortcuts
+- EC2, S3, RDS, Lambda management
+- ECS/EKS container services
+- IAM and security
+- VPC networking
+- CloudFormation and CloudWatch
+
+[View AWS Guide →](./8-cloud-cli/aws/README.md)
+
+#### [Azure](./8-cloud-cli/azure/)
+Complete Azure CLI commands and utilities.
+
+**Topics Covered:**
+- Virtual Machines and App Services
+- AKS and Azure Container Registry
+- Azure SQL and Functions
+- Key Vault and Azure AD
+- RBAC and networking
+
+[View Azure Guide →](./8-cloud-cli/azure/README.md)
+
+#### [Google Cloud Platform (GCP)](./8-cloud-cli/gcp/)
+Complete gcloud CLI commands and utilities.
+
+**Topics Covered:**
+- Compute Engine and GKE
+- Cloud Storage and Cloud SQL
+- Cloud Functions and Cloud Run
+- IAM and networking
+- Logging and monitoring
+
+[View GCP Guide →](./8-cloud-cli/gcp/README.md)
+
+#### [Shell Profiles and Aliases](./8-cloud-cli/shell-profiles/)
+Productivity-boosting shell aliases and functions for all DevOps tools.
+
+**Features:**
+- Docker, Kubernetes, Terraform shortcuts
+- AWS, Azure, GCP quick commands
 - Git workflow helpers
-- Terraform quick commands
-- AWS and Azure CLI shortcuts
-- System navigation and monitoring
 - Custom utility functions
 
 **Quick Examples:**
@@ -224,50 +275,76 @@ Productivity-boosting shell aliases, functions, and shortcuts for DevOps workflo
 # Docker shortcuts
 dclean          # Stop and remove all containers
 dcrestart       # Full cleanup, rebuild, and restart
-dclogs          # Follow compose logs
 
 # Kubernetes shortcuts
 kgp             # Get pods
 kex <pod>       # Exec into pod
-klogs <pod>     # Follow pod logs
 
-# Terraform shortcuts
-tfi             # Terraform init
-tfa             # Terraform apply
-tfv             # Terraform validate
+# Cloud shortcuts
+ec2ls           # List AWS EC2 instances
+azls            # List Azure VMs
+gcls            # List GCP instances
 ```
 
-[View Shell Profiles Guide →](./shell-profiles/README.md)
+[View Shell Profiles Guide →](./8-cloud-cli/shell-profiles/README.md)
 
 ## 📂 Repository Structure
 
+Organized by 8 core DevOps categories with numbered folders:
+
 ```
 devops-utils/
-├── README.md                       # This file
-├── kubernetes/                     # Kubernetes utilities
-│   └── README.md
-├── docker/                         # Docker utilities
-│   └── README.md
-├── terraform/                      # Terraform templates
-│   └── README.md
-├── pulumi/                         # Pulumi templates
-│   └── README.md
-├── aws/                           # AWS CLI utilities
-│   └── README.md
-├── azure/                         # Azure CLI utilities
-│   └── README.md
-├── gcp/                           # Google Cloud Platform utilities
-│   └── README.md
-├── monitoring/                    # Monitoring solutions
-│   ├── README.md
-│   ├── prometheus-grafana/        # Prometheus + Grafana stack
-│   ├── zabbix/                    # Zabbix monitoring
-│   ├── elk-stack/                 # ELK Stack (Elasticsearch, Logstash, Kibana)
-│   └── netdata/                   # Netdata real-time monitoring
-├── shell-profiles/                # Shell aliases and functions
-│   ├── README.md
-│   └── devops-aliases.sh
-└── scripts/                       # Utility scripts
+├── README.md                           # This file
+│
+├── 1-containerization/                 # Category 1: Containerization
+│   ├── docker/                         # Docker commands and utilities
+│   │   └── README.md
+│   └── kubernetes/                     # Kubernetes orchestration
+│       └── README.md
+│
+├── 2-infrastructure/                   # Category 2: Infrastructure
+│   ├── terraform/                      # HashiCorp Terraform IaC
+│   │   └── README.md
+│   └── pulumi/                         # Pulumi modern IaC
+│       └── README.md
+│
+├── 3-monitoring/                       # Category 3: Monitoring
+│   └── monitoring/                     # All monitoring solutions
+│       ├── README.md
+│       ├── prometheus-grafana/         # Metrics and dashboards
+│       ├── zabbix/                     # Enterprise monitoring
+│       ├── elk-stack/                  # Centralized logging
+│       └── netdata/                    # Real-time monitoring
+│
+├── 4-ci-cd/                           # Category 4: CI/CD
+│   └── ci-cd/                         # All CI/CD pipelines
+│       ├── README.md
+│       ├── github-actions/            # GitHub Actions workflows
+│       ├── jenkins/                   # Jenkins pipelines
+│       ├── gitlab-ci/                 # GitLab CI templates
+│       ├── aws-codepipeline/          # AWS CodePipeline
+│       └── argocd/                    # GitOps for Kubernetes
+│
+├── 5-config-management/               # Category 5: Config Management
+│   └── (Coming Soon: Ansible, Chef, Puppet)
+│
+├── 6-secret-management/               # Category 6: Secret Management
+│   └── (Coming Soon: Vault, Secrets Manager)
+│
+├── 7-testing/                         # Category 7: Testing
+│   └── (Coming Soon: k6, Trivy, Terratest)
+│
+└── 8-cloud-cli/                       # Category 8: Cloud CLI
+    ├── aws/                           # AWS CLI utilities
+    │   └── README.md
+    ├── azure/                         # Azure CLI utilities
+    │   └── README.md
+    ├── gcp/                           # Google Cloud Platform
+    │   └── README.md
+    ├── shell-profiles/                # Shell aliases and functions
+    │   ├── README.md
+    │   └── devops-aliases.sh
+    └── scripts/                       # Utility scripts
 ```
 
 ## 🔧 Common Tasks
@@ -378,9 +455,9 @@ az vm stop --resource-group myRG --name myVM
 - ✅ Regular log rotation
 - ✅ Audit trail for all changes
 
-## 🎯 Quick Reference
+## 🎯 Quick Reference by Category
 
-### Most Used Commands
+### 1. Containerization
 
 | Task | Command | Alias |
 |------|---------|-------|
@@ -389,13 +466,46 @@ az vm stop --resource-group myRG --name myVM
 | Clean rebuild Docker | Full cleanup + rebuild | `dcrestart` |
 | List Kubernetes pods | `kubectl get pods` | `kgp` |
 | Exec into pod | `kubectl exec -it <pod> -- bash` | `kex <pod>` |
-| Terraform apply | `terraform apply` | `tfa` |
+| Follow pod logs | `kubectl logs -f <pod>` | `klogs <pod>` |
+
+### 2. Infrastructure
+
+| Task | Command | Alias |
+|------|---------|-------|
+| Terraform init | `terraform init` | `tfi` |
 | Terraform plan | `terraform plan` | `tfp` |
-| Git status | `git status` | `gs` |
-| Git commit & push | `git add . && git commit -m "msg" && git push` | `gcp "msg"` |
-| List AWS EC2 | `aws ec2 describe-instances` | `ec2ls` |
-| List Azure VMs | `az vm list` | `azvm list` |
-| List GCP instances | `gcloud compute instances list` | `gcpls` |
+| Terraform apply | `terraform apply` | `tfa` |
+| Terraform destroy | `terraform destroy` | `tfd` |
+| Pulumi preview | `pulumi preview` | `pp` |
+| Pulumi up | `pulumi up` | `pu` |
+
+### 3. Monitoring
+
+| Task | Tool | Access |
+|------|------|--------|
+| Metrics & Dashboards | Prometheus + Grafana | http://localhost:3000 |
+| Enterprise Monitoring | Zabbix | http://localhost:8080 |
+| Log Analysis | ELK Stack | http://localhost:5601 |
+| Real-time Monitoring | Netdata | http://localhost:19999 |
+
+### 4. CI/CD
+
+| Tool | Quick Start | Port |
+|------|-------------|------|
+| GitHub Actions | Push `.github/workflows/*.yml` | N/A (Cloud) |
+| Jenkins | `docker-compose up` in `ci-cd/jenkins/` | http://localhost:8080 |
+| GitLab CI | Push `.gitlab-ci.yml` | N/A (Cloud) |
+| AWS CodePipeline | `terraform apply` in terraform/ | AWS Console |
+| ArgoCD | `kubectl apply -f application.yaml` | http://localhost:8080 |
+
+### 8. Cloud CLI
+
+| Task | AWS | Azure | GCP |
+|------|-----|-------|-----|
+| List VMs | `aws ec2 describe-instances` | `az vm list` | `gcloud compute instances list` |
+| List storage | `aws s3 ls` | `az storage account list` | `gsutil ls` |
+| List clusters | `aws eks list-clusters` | `az aks list` | `gcloud container clusters list` |
+| Alias | `ec2ls` | `azls` | `gcls` |
 
 ## 📖 Learning Resources
 
