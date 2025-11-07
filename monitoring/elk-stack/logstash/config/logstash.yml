@@ -1,0 +1,20 @@
+http.host: "0.0.0.0"
+xpack.monitoring.enabled: false
+
+# Pipeline settings
+pipeline.workers: 2
+pipeline.batch.size: 125
+pipeline.batch.delay: 50
+
+# Path settings
+path.config: /usr/share/logstash/pipeline
+path.data: /usr/share/logstash/data
+
+# Log settings
+log.level: info
+path.logs: /usr/share/logstash/logs
+
+# Queue settings
+queue.type: memory
+queue.max_bytes: 1gb
+

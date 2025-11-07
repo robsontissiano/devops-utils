@@ -1,0 +1,32 @@
+# Custom Grok Patterns
+
+# Application log pattern
+MYAPP_LOG %{TIMESTAMP_ISO8601:timestamp} \[%{LOGLEVEL:level}\] \[%{DATA:thread}\] %{JAVACLASS:logger} - %{GREEDYDATA:message}
+
+# Custom web log pattern
+CUSTOM_WEBLOG %{IPORHOST:client_ip} - %{DATA:user} \[%{HTTPDATE:timestamp}\] "%{WORD:method} %{URIPATHPARAM:request} HTTP/%{NUMBER:http_version}" %{NUMBER:status:int} %{NUMBER:bytes:int} %{QS:referrer} %{QS:user_agent} %{NUMBER:response_time:float}
+
+# Database log pattern
+DB_LOG %{TIMESTAMP_ISO8601:timestamp} \[%{DATA:connection_id}\] \[%{LOGLEVEL:level}\] %{GREEDYDATA:message}
+
+# Custom format with response time
+API_LOG %{TIMESTAMP_ISO8601:timestamp} %{WORD:method} %{URIPATH:path} %{NUMBER:status:int} %{NUMBER:response_time:float}ms %{DATA:user_id}
+
+# Docker container log
+DOCKER_LOG %{TIMESTAMP_ISO8601:timestamp} \[%{WORD:level}\] container=%{WORD:container_id} %{GREEDYDATA:message}
+
+# JSON-like log pattern
+JSON_LOG \{.*?"timestamp":\s*"?%{TIMESTAMP_ISO8601:timestamp}"?.*?"level":\s*"?%{LOGLEVEL:level}"?.*?"message":\s*"?%{GREEDYDATA:message}"?.*?\}
+
+# Microservice log pattern
+MICROSERVICE_LOG %{TIMESTAMP_ISO8601:timestamp} \[%{DATA:service_name}\] \[%{DATA:trace_id}\] \[%{LOGLEVEL:level}\] %{GREEDYDATA:message}
+
+# Performance log
+PERF_LOG %{TIMESTAMP_ISO8601:timestamp} method=%{WORD:method} duration=%{NUMBER:duration:float}ms cpu=%{NUMBER:cpu:float}% memory=%{NUMBER:memory:int}MB
+
+# Security/Auth log
+AUTH_LOG %{TIMESTAMP_ISO8601:timestamp} user=%{DATA:username} action=%{WORD:action} result=%{WORD:result} ip=%{IP:client_ip}
+
+# Error log with stack trace
+ERROR_LOG %{TIMESTAMP_ISO8601:timestamp} \[%{LOGLEVEL:level}\] %{JAVACLASS:exception_class}: %{GREEDYDATA:exception_message}
+
