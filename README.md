@@ -154,6 +154,32 @@ Complete gcloud CLI commands and utilities for Google Cloud.
 
 [View GCP Guide →](./gcp/README.md)
 
+---
+
+### Monitoring Solutions
+
+#### [Monitoring Tools](./monitoring/)
+Comprehensive collection of open-source monitoring solutions for infrastructure and application monitoring.
+
+**Available Solutions:**
+- **Prometheus + Grafana** ⭐ - Modern metrics and visualization (Recommended for cloud-native)
+- **Zabbix** - Enterprise monitoring with agent-based approach
+- **ELK Stack** - Centralized logging and log analysis
+- **Netdata** - Real-time monitoring with zero configuration
+
+**Topics Covered:**
+- Metrics collection and visualization
+- Log aggregation and analysis
+- Alerting and notifications
+- Distributed monitoring
+- Container and Kubernetes monitoring
+- Infrastructure monitoring
+- Application performance monitoring
+
+[View Monitoring Guide →](./monitoring/README.md)
+
+---
+
 ### Shell Utilities
 
 #### [Shell Profiles and Aliases](./shell-profiles/)
@@ -207,6 +233,12 @@ devops-utils/
 │   └── README.md
 ├── gcp/                           # Google Cloud Platform utilities
 │   └── README.md
+├── monitoring/                    # Monitoring solutions
+│   ├── README.md
+│   ├── prometheus-grafana/        # Prometheus + Grafana stack
+│   ├── zabbix/                    # Zabbix monitoring
+│   ├── elk-stack/                 # ELK Stack (Elasticsearch, Logstash, Kibana)
+│   └── netdata/                   # Netdata real-time monitoring
 ├── shell-profiles/                # Shell aliases and functions
 │   ├── README.md
 │   └── devops-aliases.sh

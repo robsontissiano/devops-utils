@@ -1,0 +1,124 @@
+global:
+  resolve_timeout: 5m
+  # SMTP configuration (uncomment and configure for email alerts)
+  # smtp_smarthost: 'smtp.gmail.com:587'
+  # smtp_from: 'alertmanager@example.com'
+  # smtp_auth_username: 'your-email@gmail.com'
+  # smtp_auth_password: 'your-app-password'
+  # smtp_require_tls: true
+
+# Templates for notifications
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# The root route with all parameters, which are inherited by child routes
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+
+  routes:
+    # Route critical alerts to a different receiver
+    - match:
+        severity: critical
+      receiver: 'critical'
+      continue: true
+
+    # Route warning alerts
+    - match:
+        severity: warning
+      receiver: 'warning'
+
+# Inhibition rules (suppress certain alerts based on other alerts)
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']
+
+# Receivers configuration
+receivers:
+  # Default receiver
+  - name: 'default'
+    webhook_configs:
+      - url: 'http://localhost:5001/'
+        send_resolved: true
+
+  # Critical alerts receiver
+  - name: 'critical'
+    # Email example (uncomment and configure)
+    # email_configs:
+    #   - to: 'oncall@example.com'
+    #     headers:
+    #       Subject: 'CRITICAL: {{ .GroupLabels.alertname }}'
+    #     html: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+
+    # Slack example (uncomment and configure)
+    # slack_configs:
+    #   - api_url: 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL'
+    #     channel: '#critical-alerts'
+    #     title: 'CRITICAL: {{ .GroupLabels.alertname }}'
+    #     text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+    #     send_resolved: true
+
+    # PagerDuty example (uncomment and configure)
+    # pagerduty_configs:
+    #   - service_key: 'YOUR_SERVICE_KEY'
+    #     description: '{{ .GroupLabels.alertname }}'
+
+    # Webhook example
+    webhook_configs:
+      - url: 'http://localhost:5001/'
+        send_resolved: true
+
+  # Warning alerts receiver
+  - name: 'warning'
+    # Slack example (uncomment and configure)
+    # slack_configs:
+    #   - api_url: 'https://hooks.slack.com/services/YOUR/WEBHOOK/URL'
+    #     channel: '#alerts'
+    #     title: 'WARNING: {{ .GroupLabels.alertname }}'
+    #     text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+
+    # Webhook example
+    webhook_configs:
+      - url: 'http://localhost:5001/'
+        send_resolved: true
+
+# Example Slack configuration (copy to critical/warning receivers)
+# slack_configs:
+#   - api_url: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXX'
+#     channel: '#alerts'
+#     username: 'Alertmanager'
+#     icon_emoji: ':warning:'
+#     title: '{{ template "slack.default.title" . }}'
+#     title_link: '{{ template "slack.default.titlelink" . }}'
+#     pretext: '{{ template "slack.default.pretext" . }}'
+#     text: '{{ template "slack.default.text" . }}'
+#     fallback: '{{ template "slack.default.fallback" . }}'
+#     send_resolved: true
+
+# Example Email configuration (copy to receivers)
+# email_configs:
+#   - to: 'team@example.com'
+#     from: 'alertmanager@example.com'
+#     smarthost: 'smtp.gmail.com:587'
+#     auth_username: 'your-email@gmail.com'
+#     auth_password: 'your-app-password'
+#     headers:
+#       Subject: '{{ template "email.default.subject" . }}'
+#     html: '{{ template "email.default.html" . }}'
+#     require_tls: true
+
+# Example Webhook configuration
+# webhook_configs:
+#   - url: 'http://webhook.example.com/alert'
+#     send_resolved: true
+#     http_config:
+#       basic_auth:
+#         username: 'user'
+#         password: 'pass'
+

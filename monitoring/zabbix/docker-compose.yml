@@ -1,0 +1,117 @@
+version: '3.8'
+
+networks:
+  zabbix-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  zabbix-data:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: zabbix-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zabbix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:alpine-latest
+    container_name: zabbix-server
+    restart: unless-stopped
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_password
+      POSTGRES_DB: zabbix
+      ZBX_ENABLE_SNMP_TRAPS: "true"
+      ZBX_STARTPOLLERS: 50
+      ZBX_STARTPOLLERSUNREACHABLE: 10
+      ZBX_STARTTRAPPERS: 10
+      ZBX_STARTPINGERS: 10
+      ZBX_STARTDISCOVERERS: 5
+      ZBX_CACHESIZE: 256M
+      ZBX_HISTORYCACHESIZE: 128M
+      ZBX_TRENDCACHESIZE: 128M
+      ZBX_VALUECACHESIZE: 256M
+    ports:
+      - "10051:10051"
+    volumes:
+      - zabbix-data:/var/lib/zabbix
+    networks:
+      - zabbix-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-latest
+    container_name: zabbix-web
+    restart: unless-stopped
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbix_password
+      POSTGRES_DB: zabbix
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_SERVER_NAME: "Zabbix Docker"
+      PHP_TZ: "America/New_York"
+    ports:
+      - "8080:8080"
+    networks:
+      - zabbix-net
+    depends_on:
+      - zabbix-server
+      - postgres
+
+  zabbix-agent:
+    image: zabbix/zabbix-agent2:alpine-latest
+    container_name: zabbix-agent
+    restart: unless-stopped
+    environment:
+      ZBX_HOSTNAME: "Zabbix server"
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_SERVER_PORT: 10051
+    privileged: true
+    pid: "host"
+    ports:
+      - "10050:10050"
+    networks:
+      - zabbix-net
+    depends_on:
+      - zabbix-server
+
+  # Optional: Java Gateway for monitoring JMX applications
+  # zabbix-java-gateway:
+  #   image: zabbix/zabbix-java-gateway:alpine-latest
+  #   container_name: zabbix-java-gateway
+  #   restart: unless-stopped
+  #   ports:
+  #     - "10052:10052"
+  #   networks:
+  #     - zabbix-net
+
+  # Optional: SNMP Traps
+  # zabbix-snmptraps:
+  #   image: zabbix/zabbix-snmptraps:alpine-latest
+  #   container_name: zabbix-snmptraps
+  #   restart: unless-stopped
+  #   ports:
+  #     - "162:1162/udp"
+  #   volumes:
+  #     - ./snmptraps:/var/lib/zabbix/snmptraps:rw
+  #   networks:
+  #     - zabbix-net
+

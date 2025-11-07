@@ -1,0 +1,32 @@
+groups:
+  - name: recording_rules
+    interval: 30s
+    rules:
+      # CPU usage
+      - record: instance:node_cpu:avg_rate5m
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+      # Memory usage
+      - record: instance:node_memory_usage:percentage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100
+
+      # Disk usage
+      - record: instance:node_disk_usage:percentage
+        expr: 100 - ((node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs"} / node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs"}) * 100)
+
+      # Network receive rate
+      - record: instance:node_network_receive:rate5m
+        expr: rate(node_network_receive_bytes_total[5m])
+
+      # Network transmit rate
+      - record: instance:node_network_transmit:rate5m
+        expr: rate(node_network_transmit_bytes_total[5m])
+
+      # Container CPU usage
+      - record: container:cpu_usage:rate5m
+        expr: sum(rate(container_cpu_usage_seconds_total{name!=""}[5m])) by (name) * 100
+
+      # Container memory usage
+      - record: container:memory_usage:percentage
+        expr: (container_memory_usage_bytes{name!=""} / container_spec_memory_limit_bytes{name!=""}) * 100
+
