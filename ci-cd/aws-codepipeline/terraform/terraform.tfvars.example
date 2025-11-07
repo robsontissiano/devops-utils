@@ -1,0 +1,19 @@
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Project Configuration
+project_name = "myapp"
+
+# GitHub Configuration
+github_owner  = "myusername"
+github_repo   = "myrepo"
+github_branch = "main"
+github_token  = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# ECR Configuration
+ecr_repository_url = "123456789.dkr.ecr.us-east-1.amazonaws.com/myapp"
+
+# ECS Configuration
+ecs_cluster_name = "my-cluster"
+ecs_service_name = "my-service"
+

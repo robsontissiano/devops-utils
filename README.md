@@ -156,6 +156,31 @@ Complete gcloud CLI commands and utilities for Google Cloud.
 
 ---
 
+### CI/CD - Continuous Integration & Deployment
+
+#### [CI/CD Pipelines](./ci-cd/)
+Automated build, test, and deployment pipelines for software delivery.
+
+**Available Solutions:**
+- **GitHub Actions** ⭐ - Cloud-native CI/CD for GitHub (Most Popular)
+- **Jenkins** - Self-hosted automation server with 1500+ plugins
+- **GitLab CI** - Built-in CI/CD for GitLab repositories
+- **AWS CodePipeline** - Fully managed AWS-native CI/CD
+- **ArgoCD** - GitOps continuous delivery for Kubernetes
+
+**Features:**
+- Automated testing and building
+- Docker image creation
+- AWS deployment automation
+- Kubernetes deployments
+- Infrastructure as Code pipelines
+- Multi-environment deployments
+- Security scanning
+
+[View CI/CD Guide →](./ci-cd/README.md)
+
+---
+
 ### Monitoring Solutions
 
 #### [Monitoring Tools](./monitoring/)

@@ -1,0 +1,60 @@
+# AWS ECS Deployment Pipeline
+
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: 123456789.dkr.ecr.us-east-1.amazonaws.com/myapp
+  ECS_CLUSTER: my-cluster
+  ECS_SERVICE: my-service
+
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $ECR_REPOSITORY:$CI_COMMIT_SHA .
+    - docker save $ECR_REPOSITORY:$CI_COMMIT_SHA > image.tar
+  artifacts:
+    paths:
+      - image.tar
+    expire_in: 1 hour
+
+push_to_ecr:
+  stage: push
+  image: amazon/aws-cli
+  dependencies:
+    - build_image
+  before_script:
+    - yum install -y docker
+    - docker load < image.tar
+    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY
+  script:
+    - docker push $ECR_REPOSITORY:$CI_COMMIT_SHA
+
+deploy_to_ecs:
+  stage: deploy
+  image: amazon/aws-cli
+  script:
+    - |
+      aws ecs update-service \
+        --cluster $ECS_CLUSTER \
+        --service $ECS_SERVICE \
+        --force-new-deployment \
+        --region $AWS_REGION
+    - |
+      aws ecs wait services-stable \
+        --cluster $ECS_CLUSTER \
+        --services $ECS_SERVICE \
+        --region $AWS_REGION
+  environment:
+    name: production
+    url: https://example.com
+  only:
+    - main
+  when: manual
+

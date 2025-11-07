@@ -1,0 +1,61 @@
+# Terraform Pipeline
+
+stages:
+  - validate
+  - plan
+  - apply
+
+variables:
+  TF_ROOT: ${CI_PROJECT_DIR}/terraform
+  TF_VERSION: "1.6.0"
+
+image:
+  name: hashicorp/terraform:$TF_VERSION
+  entrypoint: [""]
+
+before_script:
+  - cd $TF_ROOT
+  - terraform init
+
+validate:
+  stage: validate
+  script:
+    - terraform fmt -check
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - terraform plan -out=tfplan
+  artifacts:
+    paths:
+      - $TF_ROOT/tfplan
+    expire_in: 1 week
+  only:
+    - branches
+
+apply_staging:
+  stage: apply
+  script:
+    - terraform workspace select staging || terraform workspace new staging
+    - terraform apply -auto-approve tfplan
+  environment:
+    name: staging
+  dependencies:
+    - plan
+  only:
+    - develop
+
+apply_production:
+  stage: apply
+  script:
+    - terraform workspace select production || terraform workspace new production
+    - terraform apply -auto-approve tfplan
+  environment:
+    name: production
+  dependencies:
+    - plan
+  only:
+    - main
+  when: manual
+

@@ -1,0 +1,70 @@
+# Node.js Application Pipeline
+
+image: node:18-alpine
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    - .npm/
+
+before_script:
+  - npm ci
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+lint:
+  stage: test
+  script:
+    - npm run lint
+
+test:
+  stage: test
+  coverage: '/Lines\s*:\s*(\d+\.?\d*)%/'
+  script:
+    - npm test -- --coverage
+  artifacts:
+    reports:
+      junit: junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploying to staging..."
+    - npm run deploy:staging
+  environment:
+    name: staging
+    url: https://staging.example.com
+  only:
+    - develop
+
+deploy_production:
+  stage: deploy
+  script:
+    - echo "Deploying to production..."
+    - npm run deploy:production
+  environment:
+    name: production
+    url: https://example.com
+  only:
+    - main
+  when: manual
+

@@ -1,0 +1,66 @@
+// Docker Build and Push Pipeline
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_IMAGE = 'myuser/myapp'
+        DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+    }
+
+    parameters {
+        choice(name: 'DOCKER_TAG', choices: ['latest', 'dev', 'staging', 'production'], description: 'Docker image tag')
+        booleanParam(name: 'PUSH_TO_REGISTRY', defaultValue: true, description: 'Push image to registry')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage('Test Docker Image') {
+            steps {
+                script {
+                    dockerImage.inside {
+                        sh 'echo "Running tests inside container"'
+                        // Add your test commands here
+                    }
+                }
+            }
+        }
+
+        stage('Push to Registry') {
+            when {
+                expression { params.PUSH_TO_REGISTRY == true }
+            }
+            steps {
+                script {
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
+                        dockerImage.push("${env.BUILD_NUMBER}")
+                        dockerImage.push("${params.DOCKER_TAG}")
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh "docker rmi ${DOCKER_IMAGE}:${env.BUILD_NUMBER} || true"
+        }
+        success {
+            echo "Docker image built and pushed: ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+        }
+    }
+}
+
